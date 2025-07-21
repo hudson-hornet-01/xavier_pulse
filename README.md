@@ -19,10 +19,6 @@ Xavier Pulse is a role-based event management system for colleges. Built with Dj
 - Frontend: HTML, CSS, Bootstrap
 - Hosting: PythonAnywhere
 
-## 📸 Screenshots
-
-_Add screenshots here (upload in repo or use external links)_
-
 ## 🔧 Setup Instructions
 
 1. Clone the repository:
