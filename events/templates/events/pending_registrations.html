@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mt-4">Manage Registrations for {{ event.name }}</h2>
+
+    {% if pending_registrations %}
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Participant</th>
+                <th>Registered At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registration in pending_registrations %}
+            <tr>
+                <td>{{ registration.participant.username }}</td>
+                <td>{{ registration.registered_at }}</td>
+                <td>
+                    <a href="{% url 'approve_reject_participant' registration.id 'approve' %}" class="btn btn-success btn-sm">✅ Approve</a>
+                    <a href="{% url 'approve_reject_participant' registration.id 'reject' %}" class="btn btn-danger btn-sm">❌ Reject</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-muted mt-3">No pending registrations for this event.</p>
+    {% endif %}
+</div>
+{% endblock %}

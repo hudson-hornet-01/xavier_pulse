@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4 fw-bold text-primary">👥 Approved Participants for {{ event.name }}</h1>
+
+    {% if participants %}
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Participant Name</th>
+                <th>Registration Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registration in participants %}
+            <tr>
+                <td>{{ registration.participant.username }}</td>
+                <td>{{ registration.registered_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p class="text-muted">No approved participants for this event yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

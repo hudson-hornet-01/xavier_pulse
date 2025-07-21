@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card shadow-lg p-4" style="max-width: 600px; width: 100%; border-radius: 10px;">
+        <div class="card-body text-center">
+            <h1 class="fw-bold text-primary">{{ event.name }}</h1>
+            <hr>
+            <p class="mb-2"><strong>📅 Date:</strong> <span class="text-muted">{{ event.date }}</span></p>
+            <p class="mb-2"><strong>📍 Venue:</strong> <span class="text-muted">{{ event.venue }}</span></p>
+            <p class="mb-2"><strong>🕒 Registration Deadline:</strong> {{ event.registration_deadline }}</p>
+            <p class="mb-3"><strong>📝 Description:</strong> {{ event.description }}</p>
+
+            {% if user.is_authenticated and user.user_type == 'participant' %}
+    {% if event.registration_deadline and event.registration_deadline >= today %}
+        <a href="{% url 'register_event' event.id %}" class="btn btn-success w-100 mb-2">✅ Register Now</a>
+    {% else %}
+        <div class="alert alert-warning mt-3">
+            🕒 Registration is closed for this event.
+        </div>
+    {% endif %}
+{% endif %}
+
+        {% if event.date < today and is_approved and not has_feedback %}
+        <a href="{% url 'submit_feedback' event.id %}" class="btn btn-warning w-100 my-2">
+            ✍️ Give Feedback
+        </a>
+    {% endif %}
+
+
+            <a href="{% url 'home' %}" class="btn btn-outline-secondary w-100">⬅️ Back to Events</a>
+        </div>
+    </div>
+</div>
+
+{% if event.past_images.all %}
+<div class="container mt-5">
+    <h4 class="text-center fw-bold mb-4">📸 Moments from Previous Editions</h4>
+    <div class="row g-4 justify-content-center">
+        {% for image in event.past_images.all %}
+        <div class="col-md-4 col-sm-6">
+            <div class="card border-0 shadow-sm h-100">
+                <img src="{{ image.image.url }}" class="card-img-top rounded" alt="Past Event Image" 
+                     style="height: 250px; object-fit: cover; transition: transform 0.3s ease;">
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

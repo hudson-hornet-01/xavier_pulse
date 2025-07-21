@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4 fw-bold text-primary">✏ Edit User</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="user_type" class="form-label">User Type</label>
+            <select class="form-select" id="user_type" name="user_type">
+                <option value="participant" {% if user.user_type == 'participant' %}selected{% endif %}>Participant</option>
+                <option value="manager" {% if user.user_type == 'manager' %}selected{% endif %}>Event Manager</option>
+                <option value="admin" {% if user.user_type == 'admin' %}selected{% endif %}>Admin</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">💾 Save Changes</button>
+        <a href="{% url 'manage_users' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

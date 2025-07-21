@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">📋 Feedback - {{ event.name }}</h2>
+
+    {% if feedbacks %}
+    <div class="table-responsive">
+        <table class="table table-bordered text-center align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Participant</th>
+                    <th>Rating</th>
+                    <th>Comment</th>
+                    <th>Submitted At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fb in feedbacks %}
+                <tr>
+                    <td>{{ fb.participant.full_name }}</td>
+                    <td>{{ fb.rating }}/5</td>
+                    <td>{{ fb.comment|default:"No comment" }}</td>
+                    <td>{{ fb.submitted_at|date:"M d, Y H:i" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center">No feedback has been submitted yet.</div>
+    {% endif %}
+
+    <div class="text-center mt-3">
+        <a href="{% url 'manage_event' event.id %}" class="btn btn-primary">⬅️ Back</a>
+    </div>
+</div>
+{% endblock %}

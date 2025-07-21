@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4 fw-bold text-primary">📌 Register for an Event</h1>
+
+    {% if user.is_authenticated and user.user_type == 'participant' %}
+        {% if available_events %}
+            <form method="post" class="mt-4">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="event" class="form-label">Select Event:</label>
+                    <select name="event" id="event" class="form-select" required>
+                        {% for event in available_events %}
+                            <option value="{{ event.id }}">{{ event.name }} - {{ event.date }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-success">Confirm Registration</button>
+                <a href="{% url 'event_list' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        {% else %}
+            <p class="text-muted">No events available for registration at the moment.</p>
+            <a href="{% url 'event_list' %}" class="btn btn-outline-secondary">Back to Events</a>
+        {% endif %}
+    {% else %}
+        <p class="text-muted">You need to log in as a participant to register for an event.</p>
+        <a href="{% url 'login' %}" class="btn btn-outline-primary">Login</a>
+    {% endif %}
+</div>
+{% endblock %}

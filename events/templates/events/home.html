@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <!-- Hero Section -->
+    <div class="jumbotron text-center text-white p-5 rounded" style="background: linear-gradient(135deg, #007bff, #0056b3); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+        <h1 class="display-4 fw-bold">🎉 Discover, Register & Experience Amazing Events!</h1>
+        <p class="lead">Join us to explore and participate in exciting events happening at St. Xavier's College of Management & Technology, Patna.</p>
+
+        {% if user.is_authenticated %}
+            {% if user.user_type == 'participant' %}
+                <a href="{% url 'my_events' %}" class="btn btn-light btn-lg me-3 shadow-sm">My Events</a>
+            {% elif user.user_type == 'event_manager' %}
+                <a href="{% url 'create_event' %}" class="btn btn-success btn-lg me-3 shadow-sm">Create Event</a>
+            {% elif user.user_type == 'admin' %}
+                <a href="{% url 'admin_dashboard' %}" class="btn btn-danger btn-lg shadow-sm">Admin Dashboard</a>
+            {% endif %}
+            <a href="{% url 'logout' %}" class="btn btn-outline-light btn-lg shadow-sm">Logout</a>
+        {% else %}
+            <a href="{% url 'participant_signup' %}" class="btn btn-light btn-lg me-3 shadow-sm">Sign Up Now</a>
+            <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg shadow-sm">Login</a>
+        {% endif %}
+    </div>
+
+    <!-- Upcoming Events Section -->
+    <h2 class="mt-5 fw-bold text-primary">🚀 Upcoming Events</h2>
+<div class="row">
+    {% for event in events %}
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+            {% if event.image %}
+                <img src="{{ event.image.url }}" class="card-img-top" alt="{{ event.name }}" style="height: 200px; object-fit: cover;">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ event.name }}</h5>
+                <p class="card-text text-muted">{{ event.description|truncatewords:15 }}</p>
+                <p><strong>📅 Date:</strong> {{ event.date }}</p>
+                <p class="mb-2"><strong>🕒 Registration Deadline:</strong> {{ event.registration_deadline }}</p>
+                {% if user.is_authenticated %}
+                    {% if user.user_type == 'participant' %}
+                        <a href="{% url 'event_details' event.id %}" class="btn btn-primary w-100">View Details</a>
+                    {% elif user.user_type == 'event_manager' and event.created_by == user %}
+                        <a href="{% url 'manage_event' event.id %}" class="btn btn-warning w-100">Manage Event</a>
+                    {% elif user.user_type == 'admin' %}
+                        <a href="{% url 'manage_event' event.id %}" class="btn btn-danger w-100">Manage Event</a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'participant_signup' %}?next={{ request.path }}" class="btn btn-primary w-100">View Details</a>
+                {% endif %}
+                
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-muted">No upcoming events at the moment. Stay tuned!</p>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if events.has_other_pages %}
+<nav aria-label="Event pagination">
+    <ul class="pagination justify-content-center mt-4">
+        {% if events.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1">&laquo; First</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ events.previous_page_number }}">Previous</a>
+            </li>
+        {% endif %}
+
+        <li class="page-item active">
+            <span class="page-link">Page {{ events.number }} of {{ events.paginator.num_pages }}</span>
+        </li>
+
+        {% if events.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ events.next_page_number }}">Next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ events.paginator.num_pages }}">Last &raquo;</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+    <!-- About Xavier Pulse -->
+    <div class="mt-5 p-4 bg-light rounded shadow-sm">
+        <h2 class="fw-bold text-primary">ℹ️ About Xavier Pulse</h2>
+        <p>Xavier Pulse is your go-to platform for discovering, registering, and participating in exciting events at St. Xavier's College of Management & Technology, Patna. Whether you're a student, organizer, or administrator, we streamline event management, making it seamless and enjoyable. Stay updated on upcoming events, manage your registrations effortlessly, and be part of a vibrant campus community where opportunities to learn, network, and have fun are just a click away!</p>
+    </div>
+
+    <!-- FAQs Section -->
+    <div class="mt-5">
+        <h2 class="fw-bold text-primary">❓ Frequently Asked Questions</h2>
+        <div class="accordion" id="faqAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                        ✅ How do I register for an event?
+                    </button>
+                </h2>
+                <div id="faq1" class="accordion-collapse collapse show">
+                    <div class="accordion-body">
+                        To register for an event, sign up for an account, log in, and click "Register Now" on any event listing.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                        💰 Is participation free?
+                    </button>
+                </h2>
+                <div id="faq2" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        Some events are free, while others may require a registration fee. Check the event details for more information.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                        🔄 Can I cancel my registration?
+                    </button>
+                </h2>
+                <div id="faq3" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        Yes, you can cancel your registration before the event starts. Visit your profile to manage your events.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

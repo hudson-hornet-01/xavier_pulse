@@ -1,0 +1,13 @@
+asgiref==3.8.1
+chardet==5.2.0
+Django==5.1.6
+django-environ==0.12.0
+django-widget-tweaks==1.5.0
+mysqlclient==2.2.7
+numpy==2.1.0
+pgzero==1.2.1
+pillow==11.2.1
+pygame==2.6.0
+reportlab==4.4.0
+sqlparse==0.5.3
+tzdata==2025.1
