@@ -41,7 +41,7 @@ _Add screenshots here (upload in repo or use external links)_
 
 ## 📂 Folder Structure
 
-xavier_pulse/
+```xavier_pulse/
 ├── accounts/
 ├── events/
 ├── registrations/
@@ -50,7 +50,7 @@ xavier_pulse/
 ├── templates/
 ├── manage.py
 ├── requirements.txt
-└── README.md
+└── README.md```
 
 
 ## ✍️ Authors
